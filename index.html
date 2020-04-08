@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificador de Palíndromo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.0/css/bulma.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    
+</body>
+    <div class="section" id="root">
+        <div class="columns is-centered is-mobile">
+        <div class="column is-three-quarters">
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                <nav class="level">
+                    <div>
+                        <th style="text-align: center; padding-top: 10px;"><strong>Verificador de Palíndromo</strong></th>
+                        <th style="text-align: center;">
+                            <input type="button" @click="removeAllRows()" data-test="limpar-dados" class="button is-white" id="botaoLimparHistorico" value="Apagar Histórico">
+                        </th>
+                    </div>
+                </nav>
+                </tr>
+            </thead>
+            <thead id="entradas">
+                <tr>
+                <th colspan="2">
+                    <input id="palavra" class="input" type="text" placeholder="Palíndromo" data-test="entrada" v-model="entrada" v-on:keyup.enter="addRow()">
+                </th>
+                <tr>
+                <th>Frase</th>
+                <th>Palidromo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in rows">
+                    <td :data-verificado='row.palindromo == "sim" ? "positivo" : "negativo"'>{{row.frase}}</td>
+                    <td>{{row.palindromo}}</td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        var root  = new Vue({
+        el: "#root",
+        data: {
+            entrada: '',
+            rows: [
+            ]
+        },
+        methods:{
+            addRow: function(){
+                if (this.entrada.trim().length == 0){
+                    return;
+                }
+                this.rows.push({ 
+                    frase: this.entrada, 
+                    palindromo: this.ehPalindromo(this.entrada) ? 'sim' : 'não'
+                });
+                this.entrada = '';
+            },
+            removeAllRows: function(){
+                this.rows = [];
+            },
+            ehPalindromo: function(palavra){
+                return palavra.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^0-9a-z]/gi, '').replace(/ /g, '') == palavra.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^0-9a-z]/gi, '').replace(/ /g, '').split('').reverse().join('');
+            }
+        }
+        });
+    </script>
+
+</body>
+
+</html>
